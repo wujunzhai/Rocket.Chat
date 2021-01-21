@@ -17,15 +17,15 @@ export type AttachmentProps = DefaultAttachmentProps | FileAttachmentProps | Quo
 const isQuoteAttachment = (attachment: AttachmentProps): attachment is QuoteAttachmentProps => 'message_link' in attachment;
 
 const Item: FC<{attachment: AttachmentProps; file?: FileProp }> = memo(({ attachment, file = null }) => {
-	if (isFileAttachment(attachment)) {
-		return file && <FileAttachment {...attachment} file={file}/>;
+	if (file && isFileAttachment(attachment)) {
+		return <FileAttachment {...attachment} file={file}/>;
 	}
 
 	if (isQuoteAttachment(attachment)) {
 		return <QuoteAttachment {...attachment}/>;
 	}
 
-	return <DefaultAttachment {...attachment}/>;
+	return <DefaultAttachment {...attachment as any}/>;
 });
 
 const Attachments: FC<{ attachments: Array<AttachmentProps>; file?: FileProp}> = ({ attachments = null, file }): any => attachments && attachments.map((attachment, index) => <Item key={index} file={file} attachment={attachment} />);
